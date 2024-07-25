@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clicker Game</title>
+  <style>
+    h1{
+    color: white;
+  }
+
+  /* Global styles */
+  body {
+    font-family: Arial, sans-serif;
+    background-image: url(https://img.freepik.com/free-photo/bright-pop-landscape-design_23-2149213461.jpg?size=626&ext=jpg&ga=GA1.1.2008272138.1721088000&semt=ais_user);
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    align-items: center;
+    user-select: none;
+  }
+
+  /* Main container styles */
+  .container {
+    margin-top: 50px;
+    text-align: center;
+  }
+
+  /* Sell buttons container styles */
+  .sell {
+    margin-top: 20px;
+  }
+
+  /* General button styles */
+  button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  /* Large click button styles */
+  #clickButton {
+    font-size: 20px;
+  }
+
+  /* Display counts styles */
+  #clickCount, #goldCount, #levelcount, #clickspereach, #xpCount {
+    font-size: 18px;
+    margin-top: 10px;
+    color: #fff;
+  }
+
+  /* XP and clicks styles */
+  #clickspereach {
+    color: rgb(83, 66, 240);
+  }
+
+  /* XP styles */
+  #xpCount {
+    color: dodgerblue;
+  }
+
+  /* Progress bar styles */
+  .progress-bar {
+    width: 80%; /* Adjust the width as needed */
+    height: 20px;
+    background-color: lightgray;
+    margin: 10px auto;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  /* Progress fill styles */
+  .progress-fill {
+    height: 100%;
+    background-color: rgb(255, 88, 88);
+    width: 0; /* Initially set to 0% */
+    transition: width 0.3s ease-in-out;
+  }
+
+  /* Congratulations box styles */
+  .congrats-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: lightgreen;
+    border: 1px solid darkgreen;
+    padding: 15px;
+    border-radius: 10px;
+    z-index: 1000; /* Ensure it's above other content */
+    display: none; /* Hidden by default */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    animation: fadeInOut 0.5s ease-in-out; /* Animation for fade-in and fade-out */
+  }
+
+  /* Close button styles */
+  .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  /* Profile box styles */
+  .profile-box {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: white;
+    z-index: 1000; /* Ensure it's above other content */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+    .profile-box {
+  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLHZh0aF5Og2DF4G19yPVx_QGjXfaBByFZA&s');
+  /* other styles */
+}
+
+  }
+
+  .profile-box {
+position: fixed;
+top: 10px;
+left: 10px;
+display: flex;
+align-items: center;
+padding: 10px;
+border-radius: 15px;
+background-color: white;
+z-index: 1000; /* Ensure it's above other content */
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Optional: add shadow */
+background: linear-gradient(to right, violet, indigo, blue, green, yellow, orange, red, violet, indigo, blue, green, yellow, orange, red);
+background-size: 1600% 1600%;
+animation: rainbowAnimation 15s linear infinite;
+}
+
+
+@keyframes rainbowAnimation {
+0% {
+  background-position: 0% 50%;
+}
+100% {
+  background-position: 100% 50%;
+}
+}
+
+
+
+
+.profile-box img {
+width: 75px; /* Adjust size as needed */
+height: 75px; /* Adjust size as needed */
+border-radius: 50%; /* Rounded profile picture */
+margin-right: 15px;
+}
+
+/* Profile name styles */
+.profile-name {
+font-size: 24px; /* Adjust font size as needed */
+font-weight: bold;
+border: white;
+border-radius: 2px;
+}
+
+/* Edit icon styles */
+.edit-icon {
+cursor: pointer;
+width: 30px; /* Adjust size as needed */
+height: 30px; /* Adjust size as needed */
+margin-left: 10px;
+}
+
+/* Gift icon styles */
+.gift-icon {
+cursor: pointer;
+width: 35px; /* Adjust size as needed */
+height: 35px; /* Adjust size as needed */
+margin-left: 10px;
+}
+
+
+
+  /* Redeem code container styles */
+  .redeem-container {
+    margin-top: 20px;
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Redeem code input styles */
+  #redeemInput {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 5px;
+  }
+
+  /* Redeem code button styles */
+  #redeemButton {
+    font-size: 14px;
+    padding: 8px 16px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Close button in redeem box */
+  .close-redeem-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  /* Keyframes for animation */
+  @keyframes fadeInOut {
+    0% {
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .clickable{
+    cursor: pointer;
+  }
+
+  .hidden{
+    display: none;
+  }
+
+  #popupBox {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+#closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+
+      .update-box {
+          background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+          border-radius: 16px;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+          color: #fff;
+          padding: 30px;
+          text-align: center;
+          width: 320px;
+          position: relative;
+          opacity: 0;
+          transform: scale(0.8);
+          animation: fadeIn 0.5s forwards ease-out;
+          right: -10%;
+          bottom: 200px;
+      }
+      @keyframes fadeIn {
+          to {
+              opacity: 1;
+              transform: scale(1);
+          }
+      }
+
+      @keyframes fadeOut {
+          to {
+              opacity: 0;
+              transform: scale(0.8);
+          }
+      }
+
+      .update-box.fade-out {
+          animation: fadeOut 0.5s forwards ease-out;
+      }
+
+      .update-box h2 {
+          margin: 0;
+          color: #fff;
+      }
+      .update-box p {
+          color: #dcdcdc;
+          font-size: 18px;
+          margin: 10px 0 20px;
+      }
+      .ok-button {
+          background-color: #ff9191;
+          color: white;
+          border: none;
+          border-radius: 25px;
+          padding: 10px 25px;
+          cursor: pointer;
+          position: absolute;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          transition: background-color 0.3s ease;
+          bottom: 5px;
+      }
+      .ok-button:hover {
+          background-color: #ff1a6b;
+      }
+
+      .help{
+        max-width: 30px;
+        margin-left: 1300px;
+        margin-top: 20px;
+      }
+
+      .dot{
+        max-width: 10px;
+        margin-left: -13px;
+      }
+
+      .dark-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.5); /* Adjust the opacity as needed */
+display: none; /* Initially hidden */
+z-index: 1; /* Make sure it appears above the other content */
+}
+
+ .reset-btn{
+  max-width: 30px;
+  margin-left: 1300px;
+  margin-top: 20px;
+ }
+
+ .reset-btn:hover{
+  cursor: pointer;
+ }
+
+
+ .backc{
+  max-width: 30px;
+  margin-left: 1300px;
+  cursor: pointer;
+ }
+
+ .button, .upgrade, .plusone{
+  background: linear-gradient(45deg, #ff6b6b, #f7d794);
+  border: none;
+  border-radius: 25px;
+  color: white;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.button:hover{
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active{
+  transform: scale(0.95);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+}
+
+#clickButton {
+  background: linear-gradient(45deg, #4e54c8, #8f94fb);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  padding: 20px 40px;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+#clickButton::before{
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: rotate(45deg);
+  transition: all 0.3s ease;
+}
+
+#clickButton:hover::before{
+  top: -30%;
+  left: -30%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#clickButton:active{
+  transform: scale(0.95);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+}
+
+#clicButton:disabled{
+  background: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+  </style>
+
+    
+</head>
+<body>
+  <!-- Profile Box -->
+  <div class="profile-box">
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQLHZh0aF5Og2DF4G19yPVx_QGjXfaBByFZA&s" alt="Profile Picture" class="clickable" id="clickableImage">
+<input type="file" id="fileInput" class="hidden" style="display: none;">
+
+    <span id="profileName" class="profile-name">Player123</span>
+    <img id="editNameIcon" class="edit-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRO5rwfziuzTduS_qrCHTkXWnWmwknpr3HliA&s" alt="Edit Name">
+    <img id="giftIcon" class="gift-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZAAT_aydGTCU4jYyWLRcGfnsl-sjliNZEDQ&s" alt="Gift Icon">
+  </div>
+
+  <a href="C:/Users/Babu/Downloads/py/clickhelps.html"><img src="https://cdn-icons-png.flaticon.com/512/0/827.png" alt="Help" class="help">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Location_dot_blue.svg/1024px-Location_dot_blue.svg.png" class="dot">
+  </a>
+
+  <img src="https://cdn-icons-png.flaticon.com/256/724/724974.png" alt="reset-btn" class="reset-btn" onclick="resetbtn()">
+
+
+  <!-- Main container -->
+  <div class="container">
+    <h1>Clicker Game</h1>
+    <button id="clickButton">Click Me!</button>
+    <p id="clickCount">Clicks: 0</p>
+    <p id="goldCount">Gold: 0</p>
+    <p id="levelcount">Level: 1</p>
+    <p id="clickspereach"><strong 20%>Clicks Per Each: 1</strong></p>
+    <p id="xpCount">XP: 0 / 200</p>
+    <div class="progress-bar">
+      <div id="progressFill" class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Redeem code section -->
+  <div id="redeemBox" class="redeem-container">
+    <span class="close-redeem-btn" onclick="closeRedeemBox()">X</span>
+    <input type="text" id="redeemInput" placeholder="Enter redeem code">
+    <button id="redeemButton">Redeem</button>
+  </div>
+
+  <!-- Sell buttons -->
+  <div class="sell">
+    <button class="button" onclick="buyUpgrade()">Sell 100 Clicks To Get 50 Gold</button>
+    <button class="upgrade" onclick="plusclick()">Get +200 Clicks For 50 Gold</button>
+    <button class="plusone" onclick="plusone()">+1 Click for 200 Gold</button>
+  </div>
+
+  <!-- Congratulations Box -->
+  <div id="darkOverlay" class="dark-overlay"></div>
+<div id="congratsBox" class="congrats-box">
+  <span id="congratsMessage"></span>
+  <button onclick="closeCongrats()">Close</button>
+</div>
+
+
+  <div class="update-box" id="updateBox">
+    <h2>Update Available!</h2>
+    <p>Version 1.1 is now available. Enjoy the new features and improvements!</p>
+    <button class="ok-button" onclick="closeUpdateBox()">OK</button>
+</div>
+
+<div class="background-changer">
+  <img src="https://static.vecteezy.com/system/resources/previews/024/761/024/original/background-color-white-pixel-perfect-solid-ui-icon-change-footage-better-video-look-silhouette-symbol-for-dark-mode-glyph-pictogram-on-black-space-for-web-mobile-isolated-image-vector.jpg" alt="Change background" class="backc">
+  <input type="file" id="backgroundFileInput" class="hidden" style="display: none;">
+</div>
+
+<script>
+  
+let clickCount = 0;
+let goldCount = 0;
+let levelcount = 1;
+let cpe = 1;
+let xpCount = 0;
+let xpNeededForLevelUp = 200; // Initial XP needed for level up
+let redeemedCodes = []; // Array to track redeemed codes
+
+// Random names array
+const randomNames = [
+  "Player123",
+  "Adventurer",
+  "Hero",
+  "Champion",
+  "Explorer",
+  "Clicker Master",
+  "Clicky",
+  "Noob129",
+  "Kalvin",
+  "AbomaClck",
+  "Krollo",
+  "Alloid",
+  "PromoClyck",
+  "Everoz",
+  "Mario_1203",
+  "Voltz Broz",
+  "Choas Bruh",
+  "Labrion",
+  "Lumio",
+];
+
+// Get elements
+const clickButton = document.getElementById('clickButton');
+const clickCountDisplay = document.getElementById('clickCount');
+const goldCountDisplay = document.getElementById('goldCount');
+const levelcountDisplay = document.getElementById('levelcount');
+const clickspereachDisplay = document.getElementById('clickspereach');
+const xpCountDisplay = document.getElementById('xpCount');
+const progressFill = document.getElementById('progressFill');
+const congratsBox = document.getElementById('congratsBox');
+const congratsMessage = document.getElementById('congratsMessage');
+const darkOverlay = document.getElementById('darkOverlay')
+const editNameIcon = document.getElementById('editNameIcon');
+const giftIcon = document.getElementById('giftIcon');
+const profileNameDisplay = document.getElementById('profileName');
+const redeemBox = document.getElementById('redeemBox');
+const redeemInput = document.getElementById('redeemInput');
+const redeemButton = document.getElementById('redeemButton');
+const toggleSettings = document.getElementById('toggleSettings')
+
+
+
+// Set initial random profile name
+let currentName = randomNames[Math.floor(Math.random() * randomNames.length)];
+profileNameDisplay.textContent = currentName;
+
+// Click button event listener
+clickButton.addEventListener('click', function() {
+  clickCount += cpe; // Increase clickCount by cpe (Clicks Per Each)
+  xpCount += cpe; // Increment XP based on cpe (Clicks Per Each)
+  checkLevelUp(); // Check if XP is enough for level up
+  updateCounts();
+  updateProgressBar(); // Update progress bar
+});
+
+// Function to check and handle level up
+function checkLevelUp() {
+  if (xpCount >= xpNeededForLevelUp) {
+    xpCount -= xpNeededForLevelUp; // Deduct XP for level up
+    levelcount++; // Increase level
+    xpNeededForLevelUp += 100; // Increase XP needed for next level
+    updateCounts(); // Update displayed counts
+    showCongrats(`You Have Reached Level ${levelcount}!!`); // Show congratulations message
+  }
+}
+
+// Update counts function
+function updateCounts() {
+  clickCountDisplay.textContent = `Clicks: ${clickCount}`;
+  goldCountDisplay.textContent = `Gold: ${goldCount}`;
+  levelcountDisplay.textContent = `Level: ${levelcount}`;
+  clickspereachDisplay.textContent = `Clicks Per Each: ${cpe}`;
+  xpCountDisplay.textContent = `XP: ${xpCount} / ${xpNeededForLevelUp}`;
+}
+
+// Update progress bar function
+function updateProgressBar() {
+  const progressPercent = (xpCount / xpNeededForLevelUp) * 100;
+  progressFill.style.width = `${progressPercent}%`;
+}
+
+// Function to show congratulations message
+function showCongrats(message) {
+congratsMessage.textContent = message;
+congratsBox.style.display = 'block'; // Display the congrats box
+darkOverlay.style.display = 'block'; // Display the dark overlay
+}
+
+function closeCongrats() {
+congratsBox.style.display = 'none'; // Hide the congrats box
+darkOverlay.style.display = 'none'; // Hide the dark overlay
+}
+
+// Sell upgrade function
+function buyUpgrade() {
+if (clickCount >= 100) {
+clickCount -= 100;
+goldCount += 50;
+updateCounts();
+showCongrats("Sold 100 Clicks and received 50 Gold"); // Show congratulations message
+} else {
+showCongrats("Not enough clicks to sell (must be at least 100)."); // Show message in congrats box
+}
+}
+
+// Plus Clicks upgrade function
+function plusclick() {
+  if (goldCount >= 50) {
+    goldCount -= 50;
+    clickCount += 200;
+    updateCounts();
+    showCongrats("Purchased 200 Clicks For 50 Gold"); // Example of using showCongrats
+  } else {
+    alert("You don't have enough Gold to buy this!");
+  }
+}
+
+// Plus One Click Per Each function
+function plusone() {
+  if (goldCount >= 200) {
+    goldCount -= 200;
+    cpe++;
+    updateCounts();
+    showCongrats("Successfully Purchased! Now you will get +1 click per each click."); // Example of using showCongrats
+  } else {
+    alert("You don't have enough Gold for this purchase.");
+  }
+}
+
+// Function to handle redeeming codes
+redeemButton.addEventListener('click', function() {
+  let code = redeemInput.value.trim();
+  redeemCode(code);
+});
+
+// Function to redeem codes and give rewards
+// Function to redeem codes and give rewards
+function redeemCode(code) {
+// Check if the code has already been redeemed
+if (redeemedCodes.includes(code)) {
+alert("Code has already been redeemed.");
+return;
+}
+
+
+// Example: Checking multiple hardcoded codes and providing 100 gold
+const validCodes = ["SECRETCODE123", "Editcool", "Scmcgamer"];
+if (validCodes.includes(code)) {
+goldCount += 100;
+updateCounts();
+showCongrats("Successfully redeemed! You received 100 Gold.");
+redeemedCodes.push(code); // Add the code to the redeemed codes array
+} else {
+showCongrats("Invalid code. Please try again.");
+}
+}
+
+
+function redeemCode(code) {
+// Check if the code has already been redeemed
+if (redeemedCodes.includes(code)) {
+alert("Code has already been redeemed.");
+return;
+} 
+
+const validCodes = ["Callmebro", "Noob2Pro", "Admin2God"];
+if (validCodes.includes(code)) {
+cpe += 5;
+updateCounts();
+showCongrats("Successfully redeemed! You received 5 clicks per each click.");
+redeemedCodes.push(code); // Add the code to the redeemed codes array
+} else {
+showCongrats("Invalid code. Please try again.");
+}
+}
+
+// Function to close redeem box
+function closeRedeemBox() {
+  redeemBox.style.display = 'none';
+}
+
+// Event listener for edit name icon click
+editNameIcon.addEventListener('click', editName);
+
+// Event listener for gift icon click to show redeem box
+giftIcon.addEventListener('click', function() {
+  redeemBox.style.display = 'block'; // Display redeem box
+});
+
+// Function to handle edit name
+function editName() {
+let newName = prompt("Enter your new name:");
+if (newName) {
+currentName = newName;
+profileNameDisplay.textContent = currentName;
+}
+}
+
+
+// Get elements
+const clickableImage = document.getElementById('clickableImage');
+const fileInput = document.getElementById('fileInput');
+
+// Event listener for clickable image click
+clickableImage.addEventListener('click', () => {
+fileInput.click(); // Trigger the file input click
+});
+
+// Event listener for file input change
+fileInput.addEventListener('change', (event) => {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = (e) => {
+  clickableImage.src = e.target.result; // Change the image source
+};
+reader.readAsDataURL(file);
+}
+});
+
+function closeUpdateBox() {
+        document.getElementById('updateBox').style.display = 'none';
+    }
+
+    function resetbtn() {
+      window.location.href = "C:/Users/Babu/Downloads/py/click.html"
+    }
+
+    // Get elements
+const backgroundFileInput = document.getElementById('backgroundFileInput');
+const backgroundChanger = document.querySelector('.backc');
+
+// Event listener for background changer click
+backgroundChanger.addEventListener('click', () => {
+backgroundFileInput.click(); // Trigger the file input click
+});
+
+// Event listener for file input change
+backgroundFileInput.addEventListener('change', (event) => {
+const file = event.target.files[0];
+if (file) {
+const reader = new FileReader();
+reader.onload = (e) => {
+  document.body.style.backgroundImage = `url(${e.target.result})`; // Change the background image
+  document.body.style.backgroundSize = 'cover'; // Ensure the background image covers the whole screen
+};
+reader.readAsDataURL(file);
+}
+});
+
+document.getElementById('clickButton').addEventListener('keydown', function(event) {
+if (event.key === 'Enter') {
+    event.preventDefault();
+}
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  let clickCount = 0;
+  const maxClicks = 5;
+  const cooldownTime = 60000; // 1 minute in milliseconds
+  const button = document.querySelector(".button");
+
+  button.addEventListener("click", function() {
+    clickCount++;
+
+    if (clickCount >= maxClicks) {
+      button.disabled = true;
+      showCongrats("You've reached your sell limit please try later after 1 minute!");
+
+      setTimeout(function() {
+        clickCount = 0;
+        button.disabled = false;
+      }, cooldownTime);
+    }
+  });
+});
+
+
+</script>
+
+</body>
+</html>
